@@ -1,0 +1,6 @@
+﻿  gameScene.cpp
+C:\Users\jimmy\Desktop\COMP3015\input.hpp(20,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jimmy\Desktop\COMP3015\input.hpp(21,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jimmy\Desktop\COMP3015\input.hpp(22,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jimmy\Desktop\COMP3015\input.hpp(23,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Project_Template.vcxproj -> C:\Users\jimmy\Desktop\COMP3015\x64\Debug\Project_Template.exe
