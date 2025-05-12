@@ -79,17 +79,26 @@ void GameScene::initScene() {
     shader_wireframe->setUniform("Material.Shininess", 50.0f);
     shader_wireframe->setUniform("Light.Position", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-    ParticleEmitter fireEmitter;
+    fireEmitter.flat = shaders["flat"];
+    fireEmitter.shader = shaders["particle"];
+    fireEmitter.Init();
 
     currentShader = "basic";
 }
 
 void GameScene::renderGUI() {
     ImGui::Begin("test");
-    if(ImGui::CollapsingHeader("Objects In Scene")) {
+    if(ImGui::CollapsingHeader("Objects")) {
         ImGui::Indent();
         for (int i = 0; i < objects.size(); i++) {
             ImGui::Text("Object");
+        }
+        ImGui::Unindent();
+    }
+    if(ImGui::CollapsingHeader("Emitters")) {
+        ImGui::Indent();
+        for (int i = 0; i < emitters.size(); i++) {
+            ImGui::Text("Emitter");
         }
         ImGui::Unindent();
     }
@@ -98,7 +107,7 @@ void GameScene::renderGUI() {
         for (auto const& x : shaders) {
             std::string name = x.first;
 
-            if (name == "skybox") { continue; }
+            if (name == "skybox" || name == "flat" || name == "particle") { continue; }
             if(ImGui::Button(name.c_str())) {
                 currentShader = name;
                 shaders[currentShader]->use();
@@ -136,11 +145,22 @@ void GameScene::compile() {
         shader_skybox->compileShader("shader/skybox.frag");
         shader_skybox->link();
 
+        GLSLProgram* shader_particle = new GLSLProgram();
+        shader_particle->compileShader("shader/particles/particles.vert");
+        shader_particle->compileShader("shader/particles/particles.frag");
+        shader_particle->link();
+
+        GLSLProgram* shader_flat = new GLSLProgram();
+        shader_flat->compileShader("shader/particles/solid.vert");
+        shader_flat->compileShader("shader/particles/solid.frag");
+        shader_flat->link();
 
         shaders["basic"] = shader_basic;
         shaders["pbr"] = shader_pbr;
         shaders["wireframe"] = shader_wireframe;
         shaders["skybox"] = shader_skybox;
+        shaders["flat"] = shader_flat;
+        shaders["particle"] = shader_particle;
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
 		exit(EXIT_FAILURE);
@@ -184,9 +204,9 @@ void GameScene::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    projection = glm::perspective(glm::radians(90.0f), (float)width / (float)height, 0.1f, 100.0f);
     cameraFront = InputManager::get().GetCameraFront();
     view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    projection = glm::perspective(glm::radians(90.0f), (float)width / (float)height, 0.1f, 100.0f);
 
     
     glActiveTexture(GL_TEXTURE0);
@@ -215,6 +235,22 @@ void GameScene::render() {
         SetMatrices();
         objects[i]->model->render();
     }
+
+    glDepthMask(GL_FALSE);
+    shaders["particle"]->use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fireEmitter.texture);
+
+    mv = view * model;
+    model = mat4(1.0f);
+    shaders["particle"]->setUniform("ModelViewMatrix", mv);
+    shaders["particle"]->setUniform("MVP", projection * mv);
+    shaders["particle"]->setUniform("ProjectionMatrix", projection);
+
+    glBindVertexArray(fireEmitter.particles);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, fireEmitter.nParticles);
+    glBindVertexArray(0);
+    glDepthMask(GL_TRUE);
 }
 
 void GameScene::resize(int w, int h) {
