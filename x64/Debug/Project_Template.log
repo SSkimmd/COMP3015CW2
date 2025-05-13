@@ -3,4 +3,6 @@ C:\Users\jimmy\Desktop\COMP3015\input.hpp(20,17): warning C4244: 'initializing':
 C:\Users\jimmy\Desktop\COMP3015\input.hpp(21,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\jimmy\Desktop\COMP3015\input.hpp(22,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\jimmy\Desktop\COMP3015\input.hpp(23,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jimmy\Desktop\COMP3015\scenes\GameScene\gameScene.cpp(292,45): warning C4305: 'argument': truncation from 'time_t (__cdecl *)(time_t *const )' to 'bool'
+C:\Users\jimmy\Desktop\COMP3015\scenes\GameScene\gameScene.cpp(333,23): warning C4018: '<': signed/unsigned mismatch
   Project_Template.vcxproj -> C:\Users\jimmy\Desktop\COMP3015\x64\Debug\Project_Template.exe

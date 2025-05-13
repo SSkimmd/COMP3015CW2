@@ -20,6 +20,7 @@ private:
     GLuint vaoHandle;
     SkyBox skybox = SkyBox();
     GLuint skyboxTexture;
+    ParticleEmitter fireEmitter = ParticleEmitter();
 
     std::map<std::string, GLSLProgram*> shaders;
     float angle = 0.0f;
@@ -45,6 +46,7 @@ public:
 
     std::vector<Object*> objects;
     std::vector<GrassObject*> grass;
+    std::vector<ParticleEmitter*> emitters;
     std::string currentShader;
 };
 

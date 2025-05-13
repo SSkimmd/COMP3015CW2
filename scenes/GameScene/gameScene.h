@@ -21,6 +21,16 @@ private:
     SkyBox skybox = SkyBox();
     GLuint skyboxTexture;
     ParticleEmitter fireEmitter = ParticleEmitter();
+    GLuint particleTexture;
+    float particleLifeTime = 5.5f;
+    Grid grid;
+    Random rand;
+    GLuint nParticles = 5000, initVel, startTime, particles;
+    glm::vec3 emitterPos = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::vec3 emitterDir = glm::vec3(-1.0f, 2.0f, 0.0f);
+
+
+    float deltaTime, lastFrame;
 
     std::map<std::string, GLSLProgram*> shaders;
     float angle = 0.0f;
@@ -33,6 +43,15 @@ private:
 
     glm::vec4 lightPos = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
+    struct WireframeData {
+        glm::vec4 LineColour = glm::vec4(0.0f, 0.0f, 0.05f, 1.0f);
+        float LineWidth = 0.1f;
+    };
+
+    WireframeData wireframeData;
+
+
+
     float rotateSpeedScale = 1.0f;
     void compile();
 public:
@@ -43,6 +62,7 @@ public:
     void resize(int, int);
     void SetMatrices();
     void renderGUI();
+    void InitBuffers();
 
     std::vector<Object*> objects;
     std::vector<GrassObject*> grass;

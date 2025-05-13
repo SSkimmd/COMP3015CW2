@@ -1,18 +1,5 @@
 #include "../helper/scenerunner.h"
 
-
-int SceneRunner::run(Scene& scene) {
-    scene.setDimensions(width, height);
-    scene.initScene();
-    scene.resize(width, height);
-
-    this->mainLoop(window, scene);
-    glfwTerminate();
-
-    // Exit program
-    return EXIT_SUCCESS;
-}
-
 void SceneRunner::mainLoop(GLFWwindow* window, Scene& scene) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
